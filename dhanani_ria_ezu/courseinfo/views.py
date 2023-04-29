@@ -3,8 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from courseinfo.forms import InstructorForm, SectionForm, CourseForm, StudentForm, RegistrationForm, SemesterForm
-from courseinfo.models import (
+from courseinfo.forms import InstructorForm, SectionForm, CourseForm, SemesterForm, StudentForm, RegistrationForm
+from .models import (
     Instructor,
     Section,
     Course,
@@ -12,7 +12,7 @@ from courseinfo.models import (
     Student,
     Registration,
 )
-from courseinfo.utils import PageLinksMixin
+from .utils import PageLinksMixin
 
 
 class InstructorList(LoginRequiredMixin, PermissionRequiredMixin, PageLinksMixin, ListView):
@@ -82,10 +82,14 @@ class SectionDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
         section = self.get_object()
-        context['semester'] = section.semester
-        context['course'] = section.course
-        context['instructor'] = section.instructor
-        context['registration_list'] = section.registrations.all()
+        semester = section.semester
+        course = section.course
+        instructor = section.instructor
+        registration_list = section.registrations.all()
+        context['semester'] = semester
+        context['course'] = course
+        context['instructor'] = instructor
+        context['registration_list'] = registration_list
         return context
 
 
@@ -138,7 +142,8 @@ class CourseDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
         course = self.get_object()
-        context['section_list'] = course.sections.all()
+        section_list = course.sections.all()
+        context['section_list'] = section_list
         return context
 
 
@@ -191,7 +196,8 @@ class SemesterDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
         semester = self.get_object()
-        context['section_list'] = semester.sections.all()
+        section_list = semester.sections.all()
+        context['section_list'] = section_list
         return context
 
 
@@ -245,7 +251,8 @@ class StudentDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
         student = self.get_object()
-        context['registration_list'] = student.registrations.all()
+        registration_list = student.registrations.all()
+        context['registration_list'] = registration_list
         return context
 
 
@@ -298,8 +305,10 @@ class RegistrationDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
         registration = self.get_object()
-        context['student_list'] = registration.student.registrations.all()
-        context['section_list'] = registration.section.registrations.all()
+        student = registration.student
+        section = registration.section
+        context['student'] = student
+        context['section'] = section
         return context
 
 

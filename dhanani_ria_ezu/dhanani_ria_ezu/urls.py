@@ -6,29 +6,26 @@ from django.views.generic import RedirectView, TemplateView
 urlpatterns = [
     path('',
          RedirectView.as_view(
-             pattern_name='about_urlpattern',
+             pattern_name='courseinfo_section_list_urlpattern',
              permanent=False
          )),
 
     path('login/',
-         LoginView.as_view(
-             template_name='courseinfo/login.html'),
-             name='login_urlpattern'
+         LoginView.as_view(template_name='courseinfo/login.html'),
+         name='login_urlpattern'
+         ),
+    path('logout/',
+         LogoutView.as_view(),
+         name='logout_urlpattern'
          ),
 
-         path('logout/',
-              LogoutView.as_view(),
-                  name='logout_urlpattern'
-              ),
+    path('about/',
+         TemplateView.as_view(
+             template_name='courseinfo/about.html'),
+         name='about_urlpattern'
+         ),
 
-              path('about/',
-                   TemplateView.as_view(
-                       template_name='courseinfo/about.html'),
-                   name='about_urlpattern'
-                   ),
+    path('admin/', admin.site.urls),
 
-              path('admin/', admin.site.urls),
-
-              path('', include('courseinfo.urls'))
-
+    path('', include('courseinfo.urls'))
 ]

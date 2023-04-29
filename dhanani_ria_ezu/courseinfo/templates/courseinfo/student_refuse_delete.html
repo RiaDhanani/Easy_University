@@ -9,13 +9,13 @@
         <h2>Error Deleting Student</h2>
         <p>
             You may not delete student {{ student }}.  This
-            student is currently assigned to the following
-            registrations:
+            student is currently registered in the following
+            sections:
         </p>
 
         <ul>
             {% for registration in registrations %}
-            <li><a href="{{ registration.get_absolute_url }}">{{ registration }}</a></li>
+            <li><a href="{{ registration.get_absolute_url }}">{{ registration.section }}</a></li>
             {%  endfor %}
         </ul>
 
